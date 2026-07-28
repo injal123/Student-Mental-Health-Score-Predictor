@@ -1,5 +1,9 @@
 import { useState } from "react";
 
+
+
+
+
 function App() {
   const [result, setResult] = useState(null);
 
@@ -30,7 +34,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:8000/predict", {
+    const response = await fetch("${process.env.REACT_APP_API_URL}/predict", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
