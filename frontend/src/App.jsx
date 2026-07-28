@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-
+const REACT_APP_API_URL = import.meta.env.VITE_API_URL;
 
 
 
@@ -34,7 +34,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("${process.env.REACT_APP_API_URL}/predict", {
+    const response = await fetch(`${REACT_APP_API_URL}/predict`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
