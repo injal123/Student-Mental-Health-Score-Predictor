@@ -22,7 +22,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://student-mental-health-score-predictor-1.onrender.com",   # deployed frontend
+        "https://student-mental-health-score-predictor-1.onrender.com", # deployed frontend
     ],
     allow_credentials=True,
     allow_methods=["*"],

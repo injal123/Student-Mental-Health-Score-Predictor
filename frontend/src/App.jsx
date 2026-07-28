@@ -1,7 +1,6 @@
 import { useState } from "react";
 
-const API_URL = import.meta.env.VITE_API_URL;
-console.log(API_URL);
+
 
 
 
@@ -35,7 +34,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch(`${API_URL}/predict`, {
+    const response = await fetch("https://student-mental-health-score-predictor.onrender.com/predict", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -54,6 +53,13 @@ function App() {
     });
 
 
+
+    console.log(response.status);
+    const text = await response.text();
+    console.log(text);
+
+
+    
     const data = await response.json();
 
     setResult(data.predicted_mental_health_score);
