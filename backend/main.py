@@ -22,7 +22,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173",   # React (Vite)
+        "https://student-mental-health-score-predictor-1.onrender.com",   # deployed frontend
     ],
     allow_credentials=True,
     allow_methods=["*"],
