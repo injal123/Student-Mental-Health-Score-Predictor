@@ -31,18 +31,19 @@ function App() {
   };
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    const response = await fetch("https://student-mental-health-score-predictor.onrender.com/predict", {
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const response = await fetch(
+    "https://student-mental-health-score-predictor.onrender.com/predict",
+    {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         ...formData,
-
-        // convert numbers from string to number
         Age: Number(formData.Age),
         Avg_Daily_Usage_Hours: Number(formData.Avg_Daily_Usage_Hours),
         Daily_Unlocks: Number(formData.Daily_Unlocks),
@@ -50,20 +51,15 @@ function App() {
         Physical_Activity_Hours: Number(formData.Physical_Activity_Hours),
         Sleep_Hours_Per_Night: Number(formData.Sleep_Hours_Per_Night),
       }),
-    });
+    }
+  );
+
+  const data = await response.json();
+  setResult(data.predicted_mental_health_score);
+};
 
 
 
-    console.log(response.status);
-    const text = await response.text();
-    console.log(text);
-
-
-    
-    const data = await response.json();
-
-    setResult(data.predicted_mental_health_score);
-  };
 
 
   const platforms = [
