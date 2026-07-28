@@ -1,122 +1,236 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [result, setResult] = useState(null);
+
+  const [formData, setFormData] = useState({
+    Age: "",
+    Gender: "Male",
+    Country: "",
+    Academic_Level: "Undergraduate",
+    Most_Used_Platform: "Facebook",
+    Purpose_Of_Use: "Education",
+    Avg_Daily_Usage_Hours: "",
+    Daily_Unlocks: "",
+    Study_Hours: "",
+    Physical_Activity_Hours: "",
+    Sleep_Hours_Per_Night: "",
+    Stress_Level: "Low",
+  });
+
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const response = await fetch("http://localhost:8000/predict", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...formData,
+
+        // convert numbers from string to number
+        Age: Number(formData.Age),
+        Avg_Daily_Usage_Hours: Number(formData.Avg_Daily_Usage_Hours),
+        Daily_Unlocks: Number(formData.Daily_Unlocks),
+        Study_Hours: Number(formData.Study_Hours),
+        Physical_Activity_Hours: Number(formData.Physical_Activity_Hours),
+        Sleep_Hours_Per_Night: Number(formData.Sleep_Hours_Per_Night),
+      }),
+    });
+
+
+    const data = await response.json();
+
+    setResult(data.predicted_mental_health_score);
+  };
+
+
+  const platforms = [
+    "Facebook",
+    "LinkedIn",
+    "Instagram",
+    "Snapchat",
+    "Twitter",
+    "YouTube",
+    "TikTok",
+    "LINE",
+    "KakaoTalk",
+    "VKontakte",
+    "WhatsApp",
+    "WeChat",
+  ];
+
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
+    <div className="min-h-screen bg-gray-100 flex justify-center items-center p-5">
+
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-lg rounded-xl p-8 w-full max-w-xl"
+      >
+
+        <h1 className="text-3xl font-bold mb-6 text-center">
+          Student Mental Health Prediction
+        </h1>
+
+
+        {/* Age */}
+        <input
+          className="input"
+          name="Age"
+          placeholder="Age"
+          type="number"
+          onChange={handleChange}
+        />
+
+
+        {/* Gender */}
+        <select
+          className="input"
+          name="Gender"
+          onChange={handleChange}
         >
-          Count is {count}
+          <option>Male</option>
+          <option>Female</option>
+        </select>
+
+
+        {/* Country */}
+        <input
+          className="input"
+          name="Country"
+          placeholder="Country"
+          onChange={handleChange}
+        />
+
+
+        {/* Academic Level */}
+        <select
+          className="input"
+          name="Academic_Level"
+          onChange={handleChange}
+        >
+          <option>Undergraduate</option>
+          <option>Graduate</option>
+          <option>High School</option>
+        </select>
+
+
+        {/* Platform */}
+        <select
+          className="input"
+          name="Most_Used_Platform"
+          onChange={handleChange}
+        >
+          {platforms.map((p) => (
+            <option key={p}>{p}</option>
+          ))}
+        </select>
+
+
+        {/* Purpose */}
+        <select
+          className="input"
+          name="Purpose_Of_Use"
+          onChange={handleChange}
+        >
+          <option>Networking</option>
+          <option>Education</option>
+          <option>Entertainment</option>
+          <option>News</option>
+        </select>
+
+
+        <input
+          className="input"
+          name="Avg_Daily_Usage_Hours"
+          placeholder="Daily Usage Hours"
+          type="number"
+          step="0.1"
+          onChange={handleChange}
+        />
+
+
+        <input
+          className="input"
+          name="Daily_Unlocks"
+          placeholder="Daily Unlocks"
+          type="number"
+          onChange={handleChange}
+        />
+
+
+        <input
+          className="input"
+          name="Study_Hours"
+          placeholder="Study Hours"
+          type="number"
+          step="0.1"
+          onChange={handleChange}
+        />
+
+
+        <input
+          className="input"
+          name="Physical_Activity_Hours"
+          placeholder="Physical Activity Hours"
+          type="number"
+          step="0.1"
+          onChange={handleChange}
+        />
+
+
+        <input
+          className="input"
+          name="Sleep_Hours_Per_Night"
+          placeholder="Sleep Hours"
+          type="number"
+          step="0.1"
+          onChange={handleChange}
+        />
+
+
+        {/* Stress */}
+        <select
+          className="input"
+          name="Stress_Level"
+          onChange={handleChange}
+        >
+          <option>Low</option>
+          <option>Medium</option>
+          <option>High</option>
+          <option>Very High</option>
+        </select>
+
+
+
+        <button
+          className="w-full bg-blue-600 text-white py-2 rounded-lg mt-5 hover:bg-blue-700"
+        >
+          Predict
         </button>
-      </section>
 
-      <div className="ticks"></div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {result && (
+          <div className="mt-5 text-center text-xl font-semibold">
+            Mental Health Score: {result}
+          </div>
+        )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      </form>
+
+    </div>
+  );
 }
 
-export default App
+export default App;
